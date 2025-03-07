@@ -1,0 +1,14 @@
+apache-airflow>=2.7.2
+apache-airflow-providers-amazon>=8.0.0
+pendulum==3.0.0
+pandas>=1.5.0
+numpy==1.26.4
+pyspark==3.5.5
+catboost==1.2.7
+boto3>=1.26.0
+scikit-learn==1.4.2
+flask==2.2.5
+fastapi==0.115.11
+awscli==1.38.8
+python-dotenv==1.0.0
+psycopg2-binary>=2.9.0

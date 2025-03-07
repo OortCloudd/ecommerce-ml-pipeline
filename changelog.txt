@@ -1,0 +1,112 @@
+# Changelog - E-commerce ML Pipeline Setup
+
+## [2025-03-07] - Project Setup and Data Management
+
+### Added
+1. Project Structure:
+   - Created essential directories for Airflow (dags, logs, plugins, config)
+   - Set up data directories (raw, processed)
+   - Added utility scripts in src/utils/
+
+2. Docker Configuration:
+   - Implemented docker-compose.yaml for Airflow services
+   - Created airflow.env for environment variables
+   - Successfully deployed Airflow with PostgreSQL backend
+
+3. Data Management:
+   - Added RetailRocket dataset to data/raw/
+   - Created data sampling utility (src/utils/create_samples.py)
+   - Generated 1000-row samples for all dataset files in data/raw/samples/
+   - Added AWS integration utilities (src/utils/s3_utils.py)
+   - Added AWS credentials configuration script (src/utils/configure_aws.py)
+
+4. Dependencies:
+   - Updated requirements.txt with necessary packages:
+     - apache-airflow and AWS provider
+     - pandas for data processing
+     - boto3 for AWS integration
+     - psycopg2-binary for PostgreSQL
+
+### Technical Decisions
+1. Docker Implementation:
+   - Chose Docker for consistent development environment
+   - Set up multi-container architecture with PostgreSQL
+   - Implemented custom initialization script
+
+2. Data Strategy:
+   - Decided to keep sample data in git for development
+   - Plan to store full dataset in S3 (pending AWS setup)
+   - Implemented .gitignore rules to exclude large data files
+
+3. Development Workflow:
+   - Created utility scripts for repeatable operations
+   - Set up local development with sample data
+   - Prepared AWS integration tools
+
+### Current Status
+- Airflow running in Docker
+- Sample data generated and stored
+- AWS utilities prepared
+- AWS S3 setup pending
+- Full dataset upload pending
+
+### Next Steps
+1. Complete AWS Setup:
+   - Create IAM user with S3 access
+   - Configure AWS credentials
+   - Create S3 bucket
+   - Upload full dataset
+
+2. Data Pipeline Development:
+   - Create first Airflow DAG
+   - Implement data processing logic
+   - Set up model training pipeline
+
+### Notes
+- All configuration follows industry best practices
+- Infrastructure defined as code (IaC)
+- Development environment mirrors production setup
+
+## [2025-03-07] - AWS Setup and Dataset Upload
+
+### Added
+1. AWS Configuration:
+   - Created IAM user with S3 access
+   - Implemented AWS credentials configuration script
+   - Added region handling in configuration utilities
+
+2. S3 Integration:
+   - Created S3 bucket (ecommerce-ml-pipeline-data) in eu-west-1
+   - Enhanced s3_utils.py with better region handling
+   - Added AWS region detection from credentials
+
+3. Dataset Upload:
+   - Successfully uploaded RetailRocket dataset to S3:
+     - category_tree.csv (14.4 KB)
+     - events.csv (94.2 MB)
+     - item_properties_part1.csv (484.3 MB)
+     - item_properties_part2.csv (408.9 MB)
+   - Organized under 'raw/' prefix in S3
+
+### Technical Decisions
+1. AWS Configuration:
+   - Used eu-west-1 (Ireland) region for lower latency
+   - Implemented proper UTF-8 encoding for credentials
+   - Added automatic region detection from credentials
+
+2. Data Organization:
+   - Used 'raw/' prefix for unprocessed data
+   - Uploaded unzipped CSV files directly
+   - Maintained original file structure
+
+### Current Status
+- AWS credentials configured
+- S3 bucket created and accessible
+- Full dataset uploaded to S3
+- Local development environment ready
+
+### Next Steps
+1. Data Pipeline Development:
+   - Create first Airflow DAG
+   - Implement data processing logic
+   - Set up model training pipeline
