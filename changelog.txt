@@ -110,3 +110,26 @@
    - Create first Airflow DAG
    - Implement data processing logic
    - Set up model training pipeline
+
+## [2025-03-07] - Model Training Pipeline Development
+
+### Added
+- Implemented ALS (Alternating Least Squares) model for collaborative filtering
+  - Added ALSTrainer class with training, prediction, and model persistence
+  - Support for user-item recommendations and similar items
+  
+- Implemented CatBoost ranking model
+  - Added RankingTrainer class with YetiRank loss function
+  - Support for group-wise learning and evaluation metrics (NDCG, MAP)
+  
+- Created model training pipeline DAG with tasks:
+  1. load_data: Load processed data from S3
+  2. train_als: Train and save ALS model
+  3. generate_candidates: Generate candidate items using ALS
+  4. train_ranker: Train and save ranking model
+  
+- Added new dependencies:
+  - implicit for ALS implementation
+  - catboost for ranking model
+  - scikit-learn for data splitting
+  - scipy for sparse matrix operations

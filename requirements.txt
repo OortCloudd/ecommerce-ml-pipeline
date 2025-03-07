@@ -12,3 +12,13 @@ fastapi==0.115.11
 awscli==1.38.8
 python-dotenv==1.0.0
 psycopg2-binary>=2.9.0
+apache-airflow==2.7.2
+apache-airflow-providers-amazon==8.15.0
+pandas==2.2.3
+pyarrow==19.0.1
+boto3==1.37.8
+catboost==1.2.2
+implicit==0.7.2
+scikit-learn==1.4.0
+scipy==1.12.0
+optuna==3.5.0
