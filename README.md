@@ -121,10 +121,6 @@ Our recommendation engine has been proven to deliver:
 
 For more information about implementing our recommendation engine in your e-commerce platform:
 
-- 📧 Email: contact@codeium.com
-- 🌐 Website: www.codeium.com
-- 📱 Phone: +1 (555) 123-4567
+- 📧 Email: louissi.nassim@gmail.com
+- 🌐 Website: 
 
-## License
-
-Copyright © 2025 Codeium, Inc. All rights reserved.
