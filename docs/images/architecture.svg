@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
+  <!-- AWS Cloud -->
+  <rect x="50" y="50" width="700" height="500" rx="10" fill="none" stroke="#232F3E" stroke-width="2"/>
+  <text x="70" y="80" font-family="Arial" font-size="16">AWS Cloud</text>
+  
+  <!-- EKS Cluster -->
+  <rect x="100" y="100" width="600" height="200" rx="5" fill="#FFFFFF" stroke="#232F3E" stroke-width="2"/>
+  <text x="120" y="130" font-family="Arial" font-size="14">Amazon EKS</text>
+  
+  <!-- Pods -->
+  <rect x="150" y="150" width="120" height="60" rx="5" fill="#FF9900" stroke="#232F3E" stroke-width="2"/>
+  <text x="170" y="185" font-family="Arial" font-size="12">Prediction Service</text>
+  
+  <rect x="300" y="150" width="120" height="60" rx="5" fill="#FF9900" stroke="#232F3E" stroke-width="2"/>
+  <text x="320" y="185" font-family="Arial" font-size="12">Monitoring Service</text>
+  
+  <rect x="450" y="150" width="120" height="60" rx="5" fill="#FF9900" stroke="#232F3E" stroke-width="2"/>
+  <text x="470" y="185" font-family="Arial" font-size="12">Prometheus</text>
+  
+  <!-- S3 -->
+  <rect x="100" y="350" width="150" height="150" rx="5" fill="#FFFFFF" stroke="#232F3E" stroke-width="2"/>
+  <text x="120" y="380" font-family="Arial" font-size="14">Amazon S3</text>
+  <text x="120" y="400" font-family="Arial" font-size="12">- Models</text>
+  <text x="120" y="420" font-family="Arial" font-size="12">- Features</text>
+  <text x="120" y="440" font-family="Arial" font-size="12">- Metrics</text>
+  
+  <!-- EFS -->
+  <rect x="300" y="350" width="150" height="150" rx="5" fill="#FFFFFF" stroke="#232F3E" stroke-width="2"/>
+  <text x="320" y="380" font-family="Arial" font-size="14">Amazon EFS</text>
+  <text x="320" y="400" font-family="Arial" font-size="12">- Cache</text>
+  <text x="320" y="420" font-family="Arial" font-size="12">- Shared Storage</text>
+  
+  <!-- Load Balancer -->
+  <rect x="500" y="350" width="150" height="150" rx="5" fill="#FFFFFF" stroke="#232F3E" stroke-width="2"/>
+  <text x="520" y="380" font-family="Arial" font-size="14">Load Balancer</text>
+  <text x="520" y="400" font-family="Arial" font-size="12">- API Gateway</text>
+  <text x="520" y="420" font-family="Arial" font-size="12">- SSL/TLS</text>
+  
+  <!-- Connections -->
+  <line x1="210" y1="210" x2="210" y2="350" stroke="#232F3E" stroke-width="2"/>
+  <line x1="360" y1="210" x2="360" y2="350" stroke="#232F3E" stroke-width="2"/>
+  <line x1="575" y1="210" x2="575" y2="350" stroke="#232F3E" stroke-width="2"/>
+  
+  <!-- Legend -->
+  <rect x="600" y="50" width="140" height="80" rx="5" fill="#FFFFFF" stroke="#232F3E" stroke-width="1"/>
+  <text x="610" y="70" font-family="Arial" font-size="12" font-weight="bold">Legend</text>
+  <rect x="610" y="80" width="20" height="20" fill="#FF9900"/>
+  <text x="635" y="95" font-family="Arial" font-size="12">Services</text>
+  <rect x="610" y="105" width="20" height="20" fill="#FFFFFF" stroke="#232F3E"/>
+  <text x="635" y="120" font-family="Arial" font-size="12">AWS Resources</text>
+</svg>

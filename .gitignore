@@ -21,10 +21,8 @@ wheels/
 *.egg
 
 # Virtual Environment
-.env
-.venv
-env/
 venv/
+env/
 ENV/
 
 # IDE
@@ -33,40 +31,32 @@ ENV/
 *.swp
 *.swo
 
-# Airflow
-airflow/logs/
-airflow/*.db
-airflow/*.pid
-airflow/webserver_config.py
-
-# AWS
-.aws/credentials
-
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
 
-# Model files
-*.pkl
-*.h5
-*.joblib
-models/
-
-# Data - Full Dataset
-data/raw/RetailRocketDataset/
-data/raw/*.zip
+# Project specific
+data/raw/
 data/processed/
-*.csv
-*.parquet
-*.json
-
-# But keep sample data
-!data/raw/samples/
-
-# Logs
-*.log
+models/
+cache/
+metrics/
+monitoring_metrics/
 logs/
 
-# OS
+# AWS
+.aws/
+*.pem
+
+# Docker
+.docker/
+
+# Kubernetes
+.kube/
+
+# Environment variables
+.env
+.env.*
+
+# System Files
 .DS_Store
 Thumbs.db

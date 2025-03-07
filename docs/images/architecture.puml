@@ -1,0 +1,89 @@
+@startuml
+!define AWSPuml https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v15.0/dist
+!include AWSPuml/AWSCommon.puml
+!include AWSPuml/Storage/S3.puml
+!include AWSPuml/Containers/EKS.puml
+!include AWSPuml/Storage/EFS.puml
+!include AWSPuml/ApplicationIntegration/APIGateway.puml
+
+skinparam componentStyle rectangle
+skinparam monochrome true
+skinparam shadowing false
+skinparam defaultFontName Arial
+skinparam defaultFontSize 14
+
+title E-commerce ML Pipeline Architecture
+
+package "Data Sources" {
+  [Product Catalog] as catalog
+  [User Events] as events
+  [Historical Data] as history
+}
+
+package "Data Pipeline" {
+  [Apache Airflow] as airflow
+  [Feature Engineering] as features
+  [Data Processor] as processor
+}
+
+package "Model Training" {
+  [ALS Trainer] as als
+  [CatBoost Trainer] as catboost
+  [Conformal Predictor] as conformal
+}
+
+package "AWS Infrastructure" {
+  EKS(eks, "EKS Cluster", "Kubernetes")
+  S3(s3, "S3 Storage", "Data & Models")
+  EFS(efs, "EFS Storage", "Shared Storage")
+  APIGateway(api, "API Gateway", "Load Balancer")
+}
+
+cloud "Kubernetes Services" {
+  [Prediction Service] as predict
+  [Monitoring Service] as monitor
+  [Prometheus] as prom
+  [Grafana] as grafana
+}
+
+database "Feature Store" {
+  [User Features] as userdb
+  [Item Features] as itemdb
+  [Interaction Matrix] as matrix
+}
+
+actor "Customer" as customer
+
+customer --> api
+api --> predict
+api --> monitor
+
+catalog --> processor
+events --> processor
+history --> processor
+
+processor --> features
+features --> [Feature Store]
+
+airflow --> processor
+airflow --> als
+airflow --> catboost
+airflow --> conformal
+
+als --> s3
+catboost --> s3
+conformal --> s3
+
+predict --> [Feature Store]
+predict --> s3
+predict --> efs
+
+monitor --> prom
+prom --> grafana
+
+eks --> predict
+eks --> monitor
+eks --> prom
+eks --> grafana
+
+@enduml

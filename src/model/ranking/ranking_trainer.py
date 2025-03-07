@@ -4,7 +4,6 @@ Module for training and evaluating the CatBoost ranking model
 import numpy as np
 from catboost import CatBoostRanker, Pool
 from sklearn.model_selection import TimeSeriesSplit
-import optuna
 import pandas as pd
 
 class RankingTrainer:
@@ -23,41 +22,16 @@ class RankingTrainer:
             timestamp=timestamps
         )
         
-    def _objective(self, trial, train_pool, valid_pool):
-        """Objective function for hyperparameter optimization"""
-        param = {
-            'iterations': trial.suggest_int('iterations', 100, 1000),
-            'learning_rate': trial.suggest_float('learning_rate', 1e-3, 1, log=True),
-            'depth': trial.suggest_int('depth', 4, 10),
-            'l2_leaf_reg': trial.suggest_float('l2_leaf_reg', 1e-8, 10.0, log=True),
-            'random_strength': trial.suggest_float('random_strength', 1e-8, 10.0, log=True),
-            'bagging_temperature': trial.suggest_float('bagging_temperature', 0.0, 1.0),
-            'loss_function': 'YetiRank',
-            'eval_metric': 'NDCG',
-            'random_seed': 42,
-            'verbose': False
-        }
-        
-        model = CatBoostRanker(**param)
-        model.fit(
-            train_pool,
-            eval_set=valid_pool,
-            early_stopping_rounds=50,
-            verbose=False
-        )
-        
-        return model.get_best_score()['validation']['NDCG']
-        
     def tune_hyperparameters(self, X, y, group_ids, timestamps, n_trials=100):
         """
-        Tune hyperparameters using Optuna with time-based validation
+        Tune hyperparameters using CatBoost's built-in grid search
         
         Args:
             X: Features matrix
             y: Target values (relevance scores)
             group_ids: Group IDs for queries (user_ids)
             timestamps: Timestamps for time-based splitting
-            n_trials: Number of optimization trials
+            n_trials: Approximate number of trials to run
         """
         # Create time-based splits
         tscv = TimeSeriesSplit(n_splits=5)
@@ -83,16 +57,36 @@ class RankingTrainer:
             group_ids[valid_idx], timestamps[valid_idx]
         )
         
-        # Run hyperparameter optimization
-        study = optuna.create_study(direction='maximize')
-        study.optimize(
-            lambda trial: self._objective(trial, train_pool, valid_pool),
-            n_trials=n_trials
+        # Define grid
+        grid = {
+            'learning_rate': [0.01, 0.03, 0.1],
+            'depth': [4, 6, 8],
+            'l2_leaf_reg': [1, 3, 5, 7],
+            'random_strength': [1, 3, 5],
+            'bagging_temperature': [0.0, 0.5, 1.0]
+        }
+        
+        # Initialize model with base parameters
+        model = CatBoostRanker(
+            iterations=1000,  # Will be limited by early stopping
+            loss_function='YetiRank',
+            eval_metric='NDCG',
+            random_seed=42,
+            verbose=False
         )
         
-        self.best_params = study.best_params
+        # Run grid search
+        model.grid_search(
+            grid,
+            train_pool,
+            eval_set=valid_pool,
+            early_stopping_rounds=50,
+            verbose=False
+        )
+        
+        self.best_params = model.get_params()
         print("Best parameters:", self.best_params)
-        print("Best NDCG:", study.best_value)
+        print("Best NDCG:", model.get_best_score()['validation']['NDCG'])
         
         return self.best_params
         

@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: monitoring-service-config
+data:
+  PERFORMANCE_THRESHOLD: "0.1"
+  DRIFT_THRESHOLD: "0.05"
+  MONITORING_WINDOW_DAYS: "7"
+  S3_BUCKET: "ecommerce-ml-pipeline-data"
+  S3_PREFIX: "monitoring"
+  AWS_REGION: "eu-west-1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: monitoring-service
+  labels:
+    app: monitoring-service
+spec:
+  ports:
+    - port: 8001
+      targetPort: 8001
+      protocol: TCP
+      name: http
+  selector:
+    app: monitoring-service
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: monitoring-service
+  labels:
+    app: monitoring-service
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: monitoring-service
+  template:
+    metadata:
+      labels:
+        app: monitoring-service
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8001"
+        prometheus.io/path: "/metrics"
+    spec:
+      containers:
+        - name: monitoring-service
+          image: ecommerce-monitoring-service:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8001
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: monitoring-service-config
+          env:
+            - name: METRICS_DIR
+              value: "/app/metrics"
+          volumeMounts:
+            - name: metrics-volume
+              mountPath: /app/metrics
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "1Gi"
+            limits:
+              cpu: "1"
+              memory: "2Gi"
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8001
+            initialDelaySeconds: 15
+            periodSeconds: 10
+      volumes:
+        - name: metrics-volume
+          persistentVolumeClaim:
+            claimName: metrics-pvc
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: metrics-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs-sc
+  resources:
+    requests:
+      storage: 10Gi
