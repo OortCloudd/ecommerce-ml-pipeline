@@ -63,6 +63,11 @@ AWS_ACCESS_KEY_ID=<your-key>
 AWS_SECRET_ACCESS_KEY=<your-secret>
 AWS_DEFAULT_REGION=eu-west-1
 
+# Development/Production Flags
+DEVELOPMENT_MODE=false  # Set to true for development environment
+PRODUCTION_READY=true   # Set to true for production-quality recommendations
+ALLOW_PICKLE=false      # Set to true only if needed for legacy models
+
 # Grafana (optional)
 GRAFANA_ADMIN_PASSWORD=<your-password>
 ```
@@ -78,6 +83,26 @@ GRAFANA_ADMIN_PASSWORD=<your-password>
    - Prediction API: http://localhost:8000
    - Prometheus: http://localhost:9090
    - Grafana: http://localhost:3000
+
+### Production Deployment
+1. Update AWS credentials and configure production mode:
+   ```bash
+   cd docker
+   ./update_aws_credentials.ps1  # On Windows
+   # Or on Linux/Mac:
+   # ./update_aws_credentials.sh
+   ```
+2. Follow the prompts to enter your AWS credentials and set production mode
+3. The script will automatically:
+   - Update the docker-compose.yml file with your credentials
+   - Set the PRODUCTION_READY flag based on your selection
+   - Restart the prediction service with the new configuration
+   - Test the service to ensure it's working correctly
+
+4. Verify the deployment:
+   - Check the health endpoint: http://localhost:8000/health
+   - Test recommendations: http://localhost:8000/recommendations
+   - Monitor logs: `docker logs ecommerce-ml-prediction-service-1`
 
 ## Data Pipeline
 

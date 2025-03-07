@@ -14,10 +14,9 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first for better caching
-COPY requirements/airflow.txt requirements.txt
-
-# Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+COPY docker/requirements/base.txt /tmp/base.txt
+COPY docker/requirements/airflow.txt /tmp/airflow.txt
+RUN pip install --no-cache-dir -r /tmp/base.txt -r /tmp/airflow.txt
 
 # Create airflow user
 RUN groupadd -g 50000 airflow && \
