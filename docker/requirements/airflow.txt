@@ -1,0 +1,11 @@
+# Import base requirements
+-r base.txt
+
+# Airflow Core
+apache-airflow==2.8.1
+apache-airflow-providers-amazon==8.15.0
+apache-airflow-providers-postgres==5.10.0
+
+# Additional Airflow Dependencies
+psycopg2-binary==2.9.9
+python-multipart==0.0.9

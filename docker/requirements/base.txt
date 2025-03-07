@@ -1,0 +1,14 @@
+# Core ML and Data Processing
+pandas==2.2.3
+numpy==1.26.4
+scikit-learn==1.4.0
+scipy==1.12.0
+pyarrow==19.0.1
+
+# AWS and Storage
+boto3==1.37.8
+
+# Utilities
+networkx==3.2.1
+tqdm==4.66.2
+requests==2.31.0

@@ -1,5 +1,65 @@
 # Changelog - E-commerce ML Pipeline Setup
 
+## [Unreleased]
+
+### Added
+- Real-time prediction service with FastAPI
+  - ALS model integration for candidate generation
+  - CatBoost ranking model with confidence intervals
+  - Real-time feature updates from S3
+  - Event tracking and logging
+  - Prometheus metrics integration
+
+- Comprehensive monitoring stack
+  - Prometheus server for metrics collection
+  - Grafana dashboards for visualization
+  - Custom metrics for model performance
+  - Feature update monitoring
+  - Request latency tracking
+
+### Changed
+- Updated project structure for better organization
+  - Separated Docker configurations by service
+  - Organized requirements by component
+  - Improved code modularity
+
+### Fixed
+- Docker service configurations
+  - Added proper health checks
+  - Implemented secure user permissions
+  - Fixed volume mounts for data persistence
+
+## [1.0.0] - 2025-03-07
+
+### Added
+- Initial project setup
+- Data processing pipeline for RetailRocket dataset
+- AWS S3 integration
+  - Raw data storage
+  - Processed features
+  - Model artifacts
+- Airflow DAG implementation
+  - Data extraction from S3
+  - Feature engineering
+  - Model training
+  - Result upload
+- Model implementations
+  - ALS for collaborative filtering
+  - CatBoost for ranking
+  - Conformal prediction for uncertainty
+
+### Changed
+- Organized project structure
+  - Source code organization
+  - Docker configurations
+  - Documentation
+
+### Security
+- Implemented secure configurations
+  - Non-root container users
+  - Environment variable management
+  - AWS credential handling
+
 ## [2025-03-07] - Project Setup and Data Management
 
 ### Added
@@ -255,3 +315,105 @@
 - Set up A/B testing framework
 - Configure Prometheus/Grafana dashboards
 - Complete AWS infrastructure setup
+
+## [2025-03-07] - Service and Docker Configuration Updates
+
+### Added
+1. Docker and Service Configuration Updates:
+   - Updated `docker-compose.yml` to remove obsolete version field and add proper service dependencies.
+   - Created `requirements.service.txt` to separate service dependencies from Airflow dependencies.
+   - Updated `Dockerfile.service` and `Dockerfile.monitoring` to use `requirements.service.txt`.
+
+2. Service Enhancements:
+   - Implemented health checks for prediction and monitoring services.
+   - Improved Docker build process by resolving dependency conflicts.
+
+3. Next Steps:
+   - Verify service health and operational status.
+   - Monitor logs for any runtime errors.
+   - Ensure all environment variables are correctly set for AWS and local operations.
+
+## [2025-03-07] - Project Structure Reorganization and Docker Services
+
+### Added
+1. Docker Service Organization:
+   - Created dedicated docker/ directory with clear service separation:
+     - airflow/: Airflow service with Python 3.10
+     - prediction/: FastAPI prediction service
+     - monitoring/: Prometheus monitoring service
+     - requirements/: Service-specific dependencies
+
+2. Requirements Organization:
+   - Split requirements into modular files:
+     - base.txt: Core ML and data processing
+     - airflow.txt: Airflow service dependencies
+     - prediction.txt: FastAPI service dependencies
+     - monitoring.txt: Prometheus and metrics
+
+3. Project Structure:
+   - Organized according to best practices:
+     - airflow/: DAGs and configurations
+     - data/: Raw and processed data
+     - docker/: Service configurations
+     - docs/: Documentation
+     - infrastructure/: Terraform and K8s
+     - models/: Model artifacts
+     - notebooks/: Jupyter notebooks
+     - src/: Main source code
+     - tests/: Test suite
+
+### Technical Decisions
+1. Service Architecture:
+   - Python 3.10 as base for all services
+   - Separated concerns between services
+   - Modular dependency management
+   - Prometheus for monitoring
+
+2. Development Workflow:
+   - Clear separation of development and production
+   - Service-specific configurations
+   - Centralized Docker management
+
+### Current Status (60% Complete)
+✅ Completed:
+- Project structure and organization
+- Docker service configurations
+- Requirements management
+- Basic service setup (Airflow, Prediction, Monitoring)
+- AWS S3 data setup and upload
+- Data processing pipeline implementation
+- Airflow DAG for data processing
+
+🔄 In Progress:
+- Model training setup
+- Service deployment
+- Monitoring setup
+
+❌ Pending:
+- Real-time prediction service implementation
+- Model training pipeline optimization
+- Production deployment
+- Grafana dashboards
+
+### Next Steps
+1. Model Training Pipeline:
+   - Optimize ALS and CatBoost training
+   - Implement model versioning
+   - Add model evaluation metrics
+
+2. Service Development:
+   - Complete FastAPI prediction service
+   - Add health checks and metrics
+   - Set up Prometheus monitoring
+   - Add Grafana dashboards
+
+3. Testing and Documentation:
+   - Add unit tests for core components
+   - Write API documentation
+   - Create deployment guides
+
+### Notes
+- All services configured for Python 3.10
+- Infrastructure ready for AWS deployment
+- Data pipeline operational with RetailRocket dataset
+- Monitoring strategy in place with Prometheus

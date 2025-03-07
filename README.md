@@ -1,130 +1,158 @@
-# Real-Time E-commerce Recommendation Engine
+# E-commerce ML Pipeline
 
-## Customer Success Story: Driving Revenue Through Personalized Shopping Experiences
+Real-time e-commerce recommendation system using collaborative filtering and learning-to-rank models.
 
-![E-commerce ML Pipeline](docs/images/architecture.png)
+## Architecture
 
-### Business Impact
+### Components
+- **Data Pipeline**: Airflow DAGs for data processing and model training
+- **Prediction Service**: FastAPI service for real-time recommendations
+- **Monitoring Stack**: Prometheus and Grafana for observability
 
-- **20% Increase in Click-Through Rate (CTR)**
-- **15% Higher Conversion Rate**
-- **30% Growth in Average Order Value**
-- **Reduced Customer Churn by 25%**
+### Models
+- **ALS (Alternating Least Squares)**
+  - Collaborative filtering for candidate generation
+  - User and item latent factors
+  - Efficient sparse matrix implementation
 
-## Overview
+- **CatBoost Ranker**
+  - Learning-to-rank with YetiRank loss
+  - Conformal prediction for uncertainty estimates
+  - Feature importance analysis
 
-Our Real-Time E-commerce Recommendation Engine delivers personalized product recommendations at scale, helping retailers boost sales and enhance customer engagement. Built on cutting-edge machine learning technology and deployed on AWS, this solution provides:
+### Features
+- Advanced user behavior analysis
+- Session-based features
+- Temporal patterns
+- Category tree analysis
+- Price-based signals
 
-- 🎯 **Personalized Recommendations**: Tailored product suggestions based on user behavior and preferences
-- ⚡ **Real-Time Processing**: Instant updates to recommendations as customers interact with your platform
-- 📊 **Advanced Analytics**: Comprehensive metrics and insights into customer behavior
-- 🔄 **Automated Learning**: Self-improving system that adapts to changing customer preferences
+## Project Structure
+```
+ecommerce-ml-pipeline/
+├── airflow/                 # Airflow DAGs and configs
+├── data/                    # Data storage (gitignored)
+│   ├── raw/                # Raw RetailRocket data
+│   └── processed/          # Processed features
+├── docker/                 # Docker configurations
+│   ├── airflow/           # Airflow service
+│   ├── monitoring/        # Prometheus & Grafana
+│   ├── prediction/        # FastAPI service
+│   └── requirements/      # Python dependencies
+├── models/                # Model artifacts
+├── notebooks/            # Jupyter notebooks
+├── src/                  # Source code
+│   ├── model/           # Model implementations
+│   ├── processing/      # Data processing
+│   ├── prediction/      # FastAPI service
+│   └── monitoring/      # Metrics collection
+└── infrastructure/      # IaC and K8s configs
+```
 
-## Key Features
+## Setup
 
-### 1. Smart Recommendation Engine
-- Hybrid recommendation system combining collaborative filtering and content-based approaches
-- Advanced feature engineering capturing temporal and sequential patterns
-- Confidence intervals for recommendation reliability
-- Real-time event processing and feature updates
+### Prerequisites
+- Docker and Docker Compose
+- Python 3.10+
+- AWS account with S3 access
 
-### 2. Production-Ready Architecture
-- Scalable microservices architecture on Kubernetes
-- Real-time prediction service with sub-100ms latency
-- Automated model monitoring and retraining
-- Robust data pipeline with Apache Airflow
+### Environment Variables
+```bash
+# AWS Configuration
+AWS_ACCESS_KEY_ID=<your-key>
+AWS_SECRET_ACCESS_KEY=<your-secret>
+AWS_DEFAULT_REGION=eu-west-1
 
-### 3. Business Intelligence
-- Real-time performance dashboards
-- A/B testing framework
-- Customer segmentation insights
-- Revenue impact analysis
+# Grafana (optional)
+GRAFANA_ADMIN_PASSWORD=<your-password>
+```
 
-### 4. Enterprise Security & Scalability
-- AWS cloud infrastructure
-- Kubernetes-based deployment
-- Automated scaling based on traffic
-- Data encryption and security compliance
+### Quick Start
+1. Clone the repository
+2. Set up environment variables
+3. Start the services:
+   ```bash
+   docker compose up -d
+   ```
+4. Access the services:
+   - Prediction API: http://localhost:8000
+   - Prometheus: http://localhost:9090
+   - Grafana: http://localhost:3000
 
-## Technical Stack
+## Data Pipeline
 
-### Infrastructure
-- **Cloud Platform**: AWS (EKS, S3, EFS)
-- **Containerization**: Docker, Kubernetes
-- **Orchestration**: Apache Airflow
-- **Monitoring**: Prometheus, Grafana
+### Data Sources
+- RetailRocket e-commerce dataset
+- Stored in AWS S3: `ecommerce-ml-pipeline-data`
+- Raw data files:
+  - `events.csv`
+  - `item_properties.csv`
+  - `category_tree.csv`
 
-### Machine Learning
-- **Collaborative Filtering**: Alternating Least Squares (ALS)
-- **Ranking Model**: CatBoost with Conformal Prediction
-- **Feature Engineering**: Advanced temporal and behavioral features
-- **Model Monitoring**: Automated drift detection and retraining
+### Feature Engineering
+- Event data cleaning
+- Item properties processing
+- Category tree handling
+- User feature engineering
+- Item feature engineering
+- Interaction matrix creation
 
-### Services
-- **API Layer**: FastAPI
-- **Data Processing**: Pandas, NumPy
-- **Model Serving**: Real-time prediction service
-- **Metrics Collection**: Custom monitoring service
+### Model Training
+1. Data preprocessing
+2. ALS model training
+3. Candidate generation
+4. CatBoost ranking model
+5. Model evaluation and storage
 
-## Getting Started
+## Monitoring
 
-Our solution can be deployed in your environment in three easy steps:
+### Metrics
+- Prediction latency
+- Request throughput
+- Feature update status
+- Model performance
+- System health
 
-1. **Infrastructure Setup**
-   - AWS account configuration
-   - Kubernetes cluster deployment
-   - Storage and networking setup
+### Dashboards
+- Real-time prediction metrics
+- Model performance tracking
+- Feature drift detection
+- System resource usage
 
-2. **Data Integration**
-   - Connect your product catalog
-   - Set up event tracking
-   - Configure data pipelines
+## API Endpoints
 
-3. **Service Deployment**
-   - Deploy recommendation services
-   - Configure monitoring
-   - Set up dashboards
+### Prediction Service
+- `POST /recommendations`
+  - Get personalized recommendations
+  - Parameters:
+    - `user_id`: User identifier
+    - `n_items`: Number of items (default: 10)
+    - `include_metadata`: Include item details
+    - `min_confidence`: Minimum prediction confidence
 
-## Success Metrics
+- `POST /events`
+  - Record user interactions
+  - Parameters:
+    - `user_id`: User identifier
+    - `item_id`: Item identifier
+    - `event_type`: Interaction type
+    - `timestamp`: Event timestamp
 
-Our recommendation engine has been proven to deliver:
+- `GET /health`
+  - Service health check
+  - Returns:
+    - Model version
+    - Feature freshness
+    - System status
 
-| Metric | Improvement |
-|--------|------------|
-| Click-Through Rate | +20% |
-| Conversion Rate | +15% |
-| Average Order Value | +30% |
-| Customer Retention | +25% |
-| Page Views | +40% |
-| Cart Abandonment | -20% |
+- `GET /metrics`
+  - Prometheus metrics endpoint
 
-## Support & Maintenance
-
-- 24/7 monitoring and alerts
-- Automated model updates
-- Regular performance reports
-- Technical support and consulting
-
-## Case Studies
-
-### Major Online Retailer
-- **Challenge**: Declining customer engagement
-- **Solution**: Implemented personalized recommendations
-- **Result**: 35% increase in customer engagement
-
-### Fashion E-commerce Platform
-- **Challenge**: High cart abandonment
-- **Solution**: Real-time personalized suggestions
-- **Result**: 25% reduction in cart abandonment
-
-## Contact
-
-For more information about implementing our recommendation engine in your e-commerce platform:
-
-- 📧 Email: contact@codeium.com
-- 🌐 Website: www.codeium.com
-- 📱 Phone: +1 (555) 123-4567
+## Contributing
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## License
-
-Copyright © 2025 Codeium, Inc. All rights reserved.
+MIT License

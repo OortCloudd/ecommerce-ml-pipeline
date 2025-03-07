@@ -1,0 +1,3 @@
+# Monitoring Dependencies
+prometheus-client==0.20.0
+grafana-api-client==2.3.0
